@@ -78,7 +78,7 @@ public class SecConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/", "/index.html", "/login.html","/register.html","/profile.html"
+                        .requestMatchers("/", "https://edusmart-22970a53efba.herokuapp.com/api/index.html", "https://edusmart-22970a53efba.herokuapp.com/api/login.html","/register.html","/profile.html"
                                 , "/course.html","/lecture.html", "/js/**", "/favicon.ico", "/admin.html",
                                 "/student.html", "/quiz.html","/professor.html").permitAll()
 
@@ -93,7 +93,7 @@ public class SecConfig {
                         //index
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/logout").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
-                        .requestMatchers("/api/getAllCourses").permitAll()
+                        .requestMatchers("https://edusmart-22970a53efba.herokuapp.com/api/getAllCourses").permitAll()
 
 
                         //register
