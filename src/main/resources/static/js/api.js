@@ -1,4 +1,7 @@
-const API_BASE = "http://localhost:8080/api";
+// ✅ Automatically select correct backend depending on environment
+const API_BASE = window.location.hostname.includes("herokuapp.com")
+    ? "https://edusmart-22970a53efba.herokuapp.com/api"
+    : "http://localhost:8080/api";
 
 /**
  * Generic API fetch wrapper for JWT-based authentication.
