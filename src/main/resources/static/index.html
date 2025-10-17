@@ -47,7 +47,7 @@
     async function loadCourses() {
         const coursesDiv = document.getElementById("courses");
         try {
-            const courses = await apiFetch("/getAllCourses");
+            const courses = await apiFetch("/api/getAllCourses");
             if (!courses || courses.length === 0) {
                 coursesDiv.innerHTML = `<p class="text-muted text-center">No courses available yet.</p>`;
                 return;

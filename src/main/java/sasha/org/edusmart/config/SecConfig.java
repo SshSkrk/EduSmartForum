@@ -45,8 +45,10 @@ public class SecConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Разрешаем фронтенд на localhost:3000
-        configuration.setAllowedOrigins(List.of("http://localhost:3000",
-                "https://edusmart-22970a53efba.herokuapp.com"));
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://edusmart-22970a53efba.herokuapp.com"
+        ));
 
         // Разрешаем стандартные методы HTTP
         configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
@@ -78,7 +80,7 @@ public class SecConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/", "https://edusmart-22970a53efba.herokuapp.com/api/index.html", "https://edusmart-22970a53efba.herokuapp.com/api/login.html","/register.html","/profile.html"
+                        .requestMatchers("/", "/index.html", "/login.html","/register.html","/profile.html"
                                 , "/course.html","/lecture.html", "/js/**", "/favicon.ico", "/admin.html",
                                 "/student.html", "/quiz.html","/professor.html").permitAll()
 
@@ -93,7 +95,7 @@ public class SecConfig {
                         //index
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/logout").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
-                        .requestMatchers("https://edusmart-22970a53efba.herokuapp.com/api/getAllCourses").permitAll()
+                        .requestMatchers("/api/getAllCourses").permitAll()
 
 
                         //register
