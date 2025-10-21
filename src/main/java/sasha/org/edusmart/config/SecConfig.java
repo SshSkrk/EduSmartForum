@@ -75,7 +75,7 @@ public class SecConfig {
                 .formLogin(form -> form.disable())
                 .logout(logout -> logout.disable())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
 
                 .authorizeHttpRequests(auth -> auth
