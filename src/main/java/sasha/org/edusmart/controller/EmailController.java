@@ -37,7 +37,7 @@ public class EmailController {
             //localhost:
             //String link = "http://localhost:8080/api/verify?userEmail=" + person.getEmail();
 
-            String link = "https://edusmart1-db5f8c5dea73.herokuapp.com/api/verify?userEmail=" + person.getEmail();
+            String link = "https://edusmart-551269b21410.herokuapp.com/api/verify?userEmail=" + person.getEmail();
 
 
             // Send email
