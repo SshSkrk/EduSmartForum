@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 import sasha.org.edusmart.dto.ForumPageDTO;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Data @NoArgsConstructor
+@RedisHash
 public class ForumPage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

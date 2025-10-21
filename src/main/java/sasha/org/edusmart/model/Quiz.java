@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 import sasha.org.edusmart.dto.QuizDTO;
 import sasha.org.edusmart.repo.CourseRepository;
 import sasha.org.edusmart.repo.QuestionRepository;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Entity
 @Data
 @NoArgsConstructor
+@RedisHash
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

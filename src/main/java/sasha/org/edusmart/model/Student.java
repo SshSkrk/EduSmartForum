@@ -3,6 +3,7 @@ package sasha.org.edusmart.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 import sasha.org.edusmart.dto.StudentDTO;
 import sasha.org.edusmart.repo.CourseRepository;
 import sasha.org.edusmart.repo.StudentQuizSubmissionRepository;
@@ -12,6 +13,7 @@ import java.util.*;
 @Entity
 @Data
 @NoArgsConstructor
+@RedisHash
 public class Student extends Person {
     @ManyToOne
     @JoinColumn(name = "course_id")

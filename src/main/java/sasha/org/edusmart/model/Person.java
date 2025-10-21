@@ -2,11 +2,13 @@ package sasha.org.edusmart.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.redis.core.RedisHash;
 import sasha.org.edusmart.dto.PersonDTO;
 
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.JOINED)
+@RedisHash
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,6 +3,7 @@ package sasha.org.edusmart.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 import sasha.org.edusmart.dto.StudentAnswerDTO;
 import sasha.org.edusmart.repo.*;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 @Entity
 @Data
 @NoArgsConstructor
+@RedisHash
 public class StudentAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

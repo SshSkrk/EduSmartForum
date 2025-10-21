@@ -5,6 +5,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
 import sasha.org.edusmart.dto.ProfessorDTO;
 import sasha.org.edusmart.repo.CourseRepository;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 @Entity
 @Data
 @NoArgsConstructor
+@RedisHash
 public class Professor extends Person{
     @OneToOne
     @JoinColumn(name = "course_id")
