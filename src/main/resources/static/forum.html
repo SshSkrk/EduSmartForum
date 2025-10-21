@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>EduSmart Professor Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body { background-color: #f5faff; font-family: 'Segoe UI', sans-serif; }
+        .navbar { background-color: #e3f2fd !important; }
+        .hero { background-color: #fff; padding: 2rem 1.5rem; border-radius: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        h1 { color: #0077b6; }
+        .section { margin-top: 2rem; padding: 1.5rem; background-color: #fff; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        h2 { color: #0077b6; }
+        .btn-custom { background-color: #0077b6; color: white; }
+        .btn-custom:hover { background-color: #005f87; }
+        table th, table td { vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+            <div class="ms-auto" id="nav-buttons">
+                <a href="index.html" class="btn btn-outline-primary me-2">Home</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="hero">
+        <h1>Welcome to the Forum</h1>
+        <p class="lead">Browse forum pages or search by theme.</p>
+        <button id="load-all-btn" class="btn btn-custom mt-3">Load All Forum Pages</button>
+    </div>
+
+    <!-- Create Forum Page section - visible for STUDENT, PROFESSOR, ADMIN -->
+    <div class="section mt-4" id="create-section" style="display:none;">
+        <h2>Create Forum Page</h2>
+        <div class="input-group mb-3">
+            <input type="text" id="new-theme-input" class="form-control" placeholder="Enter new forum theme" />
+            <button class="btn btn-custom" id="create-btn">Create</button>
+        </div>
+    </div>
+
+    <div class="section mt-4">
+        <h2>Search Forum Pages by Theme</h2>
+        <div class="input-group mb-3">
+            <input type="text" id="theme-input" class="form-control" placeholder="Enter theme part (e.g. 'java')" />
+        </div>
+    </div>
+
+    <div class="section mt-4">
+        <h2>Forum Pages</h2>
+        <div id="forum-list"></div>
+    </div>
+</div>
+
+<script>
+    async function apiFetch(url, method = "GET", body = null) {
+        const token = localStorage.getItem("token");
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: body ? JSON.stringify(body) : null
+        });
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+        // Try to parse JSON, fallback to text if fails
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+            return res.json();
+        } else {
+            return res.text();
+        }
+    }
+
+    function getCurrentUser() {
+        const user = localStorage.getItem("currentUser");
+        return user ? JSON.parse(user) : null;
+    }
+
+    async function loadAllForumPages() {
+        try {
+            const forumPages = await apiFetch(`api/getAllForumPages`);
+            renderForumPages(forumPages);
+        } catch (error) {
+            alert("Error loading forum pages: " + error.message);
+        }
+    }
+
+    async function searchForumPagesByTheme() {
+        const theme = document.getElementById("theme-input").value.trim();
+        if (theme.length === 0) {
+            document.getElementById("forum-list").innerHTML = "";
+            return;
+        }
+
+        try {
+            const encodedTheme = encodeURIComponent(theme);
+            const forumPages = await apiFetch(`api/searchForumPagesByThemePART?theme=${encodedTheme}`, "GET");
+            renderForumPages(forumPages);
+        } catch (error) {
+            console.error("Error searching forum pages:", error);
+            document.getElementById("forum-list").innerHTML = `<p class="text-danger">Error loading search results.</p>`;
+        }
+    }
+
+    async function createForumPage() {
+        const theme = document.getElementById("new-theme-input").value.trim();
+        if (!theme) {
+            alert("Please enter a theme.");
+            return;
+        }
+        try {
+            // Backend expects plain string in body, so send JSON string directly (not object)
+            const token = localStorage.getItem("token");
+            const res = await fetch(`api/createForumPage`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(theme)
+            });
+            const text = await res.text();
+            if (res.ok) {
+                alert(text);
+                document.getElementById("new-theme-input").value = "";
+                loadAllForumPages();
+            } else {
+                alert("Failed to create forum page: " + text);
+            }
+        } catch (err) {
+            alert("Failed to create forum page: " + err.message);
+        }
+    }
+
+    async function deleteForumPage(id) {
+        if (!confirm(`Are you sure you want to delete forum page with ID ${id}?`)) return;
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`api/deletePage/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                alert("Forum page deleted successfully.");
+                loadAllForumPages();
+            } else {
+                const text = await res.text();
+                alert(`Failed to delete forum page: ${text}`);
+            }
+        } catch (err) {
+            alert("Error deleting forum page: " + err.message);
+        }
+    }
+
+    function renderForumPages(pages) {
+        const container = document.getElementById("forum-list");
+        const user = getCurrentUser();
+        const role = user ? user.role : null;
+
+        const canCreate = role === "STUDENT" || role === "PROFESSOR" || role === "ADMIN";
+        const canDelete = role === "ADMIN";
+
+        if (!pages || pages.length === 0) {
+            container.innerHTML = "<p>No forum pages found.</p>";
+            return;
+        }
+
+        let html = `<table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Theme</th>
+          ${canDelete ? "<th>Actions</th>" : ""}
+        </tr>
+      </thead>
+      <tbody>`;
+
+        for (const page of pages) {
+            // Use encodeURIComponent to safely encode theme for URL
+            const themeLink = `<a href="theme.html?id=${page.id}&theme=${encodeURIComponent(page.theme)}">${page.theme}</a>`;
+
+            html += `
+        <tr>
+          <td>${page.id}</td>
+          <td>${themeLink}</td>
+          ${canDelete ? `<td><button class="btn btn-danger btn-sm" onclick="deleteForumPage(${page.id})">Delete</button></td>` : ""}
+        </tr>`;
+        }
+
+        html += "</tbody></table>";
+        container.innerHTML = html;
+
+        document.getElementById("create-section").style.display = canCreate ? "block" : "none";
+    }
+
+
+    // Event Listeners
+    document.getElementById("load-all-btn").addEventListener("click", loadAllForumPages);
+    document.getElementById("create-btn").addEventListener("click", createForumPage);
+
+    let debounceTimeout;
+    document.getElementById("theme-input").addEventListener("input", function () {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            searchForumPagesByTheme();
+        }, 300);
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+        loadAllForumPages();
+    });
+</script>
+
+</body>
+</html>

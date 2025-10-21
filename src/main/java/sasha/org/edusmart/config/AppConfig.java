@@ -45,7 +45,8 @@ public class AppConfig {
                                   final QuestionServise questionServise,
                                   final StudentRepository studentRepository,
                                   final ProfessorRepository professorRepository,
-                                  final FileResourceRepository fileResourceRepository) {
+                                  final FileResourceRepository fileResourceRepository,
+                                  final ForumPageService forumPageService) {
         return args -> {
 
             // ✅ Create persons only if they don't exist
@@ -225,6 +226,17 @@ public class AppConfig {
                 pythonCourse.setLectionList(new ArrayList<>(lectures));
                 CourseDTO courseDTO2 = courseService.createCourse(pythonCourse.courseDTO());
             }
+
+            ForumPage forumPage1 = new ForumPage("How to create your first website on java");
+            forumPageService.createForumPage(forumPage1.forumPageDTO());
+
+            ForumPage forumPage2 = new ForumPage("Help python question");
+            forumPageService.createForumPage(forumPage2.forumPageDTO());
+
+            ForumPage forumPage3 = new ForumPage("Searching for frontend dev");
+            forumPageService.createForumPage(forumPage3.forumPageDTO());
+
+
         };
     }
 }

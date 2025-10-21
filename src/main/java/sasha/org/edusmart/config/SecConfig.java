@@ -82,7 +82,7 @@ public class SecConfig {
 
                         .requestMatchers("/", "/index.html", "/login.html","/register.html","/profile.html"
                                 , "/course.html","/lecture.html", "/js/**", "/favicon.ico", "/admin.html",
-                                "/student.html", "/quiz.html","/professor.html").permitAll()
+                                "/student.html", "/quiz.html","/professor.html","/forum.html","/theme.html").permitAll()
 
                         .requestMatchers("/api/current-user").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
 
@@ -159,6 +159,16 @@ public class SecConfig {
 
                         //professor
                         .requestMatchers("/api/getAllSubmissions").hasAnyRole("ADMIN", "PROFESSOR")
+
+                        //forumPage
+                        .requestMatchers("/api/createForumPage").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
+                        .requestMatchers("/api/searchForumPagesByThemePART").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
+                        .requestMatchers("/api/getAllForumPages").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
+                        .requestMatchers("/api/deletePage/{forumPageID}").hasAnyRole("ADMIN")
+
+                        //theme
+                        .requestMatchers("/api/addAnswerOnPage/{forumPageID}").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
+                        .requestMatchers("/api/getAllAnswersOfPage").hasAnyRole("ADMIN", "PROFESSOR", "STUDENT")
 
                         .anyRequest().authenticated()
 

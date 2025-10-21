@@ -87,6 +87,7 @@
         if (user && user.role) {
             const role = user.role.toUpperCase();
             links = `<a href="profile.html" class="btn btn-outline-primary me-2">Profile</a>`;
+            links += `<a href="forum.html" class="btn btn-outline-info me-2">Forum</a>`;
             if (role === "ADMIN") links += `<a href="admin.html" class="btn btn-outline-danger me-2">Admin</a>`;
             if (role === "STUDENT") links += `<a href="student.html" class="btn btn-outline-success me-2">Student</a>`;
             if (role === "STUDENT") links += `<a href="quiz.html" class="btn btn-outline-success me-2">Quiz</a>`;
