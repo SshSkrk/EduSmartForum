@@ -3,7 +3,7 @@ package sasha.org.edusmart.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
@@ -13,26 +13,31 @@ import java.net.URI;
 public class RedisConfig {
 
     @Value("${REDISCLOUD_URL:}")
-    private String redisUrl; // Heroku Redis URL (empty on local)
+    private String redisUrl;
 
     @Bean
-    public RedisConnectionFactory redisConnectionFactory() throws Exception {
-        if (redisUrl != null && !redisUrl.isEmpty()) {
-            // Parse the Heroku REDISCLOUD_URL
+    public LettuceConnectionFactory redisConnectionFactory() throws Exception {
+        if (redisUrl != null && !redisUrl.isBlank()) {
+            // Parse the REDISCLOUD_URL: redis://user:password@host:port
             URI uri = new URI(redisUrl);
             String host = uri.getHost();
             int port = uri.getPort();
-            String password = null;
-            if (uri.getUserInfo() != null) {
-                password = uri.getUserInfo().split(":", 2)[1];
+            String userInfo = uri.getUserInfo();
+
+            RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+            config.setHostName(host);
+            config.setPort(port);
+
+            if (userInfo != null && userInfo.contains(":")) {
+                String password = userInfo.split(":", 2)[1];
+                config.setPassword(RedisPassword.of(password));
             }
 
-            RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
-            if (password != null) config.setPassword(password);
             return new LettuceConnectionFactory(config);
         }
 
-        // fallback to localhost for local development
-        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", 6379));
+        // Local fallback for development
+        RedisStandaloneConfiguration localConfig = new RedisStandaloneConfiguration("localhost", 6379);
+        return new LettuceConnectionFactory(localConfig);
     }
 }
