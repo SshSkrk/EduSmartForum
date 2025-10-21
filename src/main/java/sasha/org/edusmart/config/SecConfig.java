@@ -45,7 +45,7 @@ public class SecConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Разрешаем фронтенд на localhost:3000
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOriginPatterns(List.of("https://edusmart-551269b21410.herokuapp.com", "3000"));
 
         // Разрешаем стандартные методы HTTP
         configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
@@ -76,6 +76,7 @@ public class SecConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         .requestMatchers("/", "/index.html", "/login.html","/register.html","/profile.html"
                                 , "/course.html","/lecture.html", "/js/**", "/favicon.ico", "/admin.html",
