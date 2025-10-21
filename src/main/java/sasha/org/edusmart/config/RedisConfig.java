@@ -12,7 +12,7 @@ import java.net.URI;
 @Configuration
 public class RedisConfig {
 
-    @Value("${REDISCLOUD_URL:}")
+    @Value("${REDIS_URL:}")
     private String redisUrl; // Heroku Redis URL (empty on local)
 
     @Bean
