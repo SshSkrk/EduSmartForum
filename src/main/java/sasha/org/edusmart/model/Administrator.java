@@ -9,7 +9,6 @@ import sasha.org.edusmart.dto.AdministratorDTO;
 @Entity
 @Data
 @NoArgsConstructor
-@RedisHash
 public class Administrator extends Person{
 
     public static Administrator of(AdministratorDTO administratorDTO) {

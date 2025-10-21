@@ -12,7 +12,6 @@ import java.util.Optional;
 @Entity
 @Data
 @NoArgsConstructor
-@RedisHash
 public class StudentAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

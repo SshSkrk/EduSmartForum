@@ -14,7 +14,6 @@ import java.util.Optional;
 @Entity
 @Data
 @NoArgsConstructor
-@RedisHash
 public class Professor extends Person{
     @OneToOne
     @JoinColumn(name = "course_id")

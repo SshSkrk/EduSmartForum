@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 @Entity
 @Data
 @NoArgsConstructor
-@RedisHash
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

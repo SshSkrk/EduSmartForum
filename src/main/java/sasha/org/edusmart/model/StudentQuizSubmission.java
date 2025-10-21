@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Entity
 @Data
 @NoArgsConstructor
-@RedisHash
 public class StudentQuizSubmission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

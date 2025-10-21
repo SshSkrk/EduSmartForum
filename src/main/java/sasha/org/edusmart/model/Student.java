@@ -13,7 +13,6 @@ import java.util.*;
 @Entity
 @Data
 @NoArgsConstructor
-@RedisHash
 public class Student extends Person {
     @ManyToOne
     @JoinColumn(name = "course_id")

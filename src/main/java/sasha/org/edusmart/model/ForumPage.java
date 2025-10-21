@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Data @NoArgsConstructor
-@RedisHash
 public class ForumPage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

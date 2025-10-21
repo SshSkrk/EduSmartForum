@@ -8,7 +8,6 @@ import sasha.org.edusmart.dto.PersonDTO;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.JOINED)
-@RedisHash
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
