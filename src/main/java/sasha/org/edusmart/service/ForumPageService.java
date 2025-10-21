@@ -57,6 +57,12 @@ public class ForumPageService {
         return forumPages.stream().map(ForumPage::forumPageDTO).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public ForumPageDTO searchForumPage(String theme) {
+      Optional<ForumPage> forumPage = forumPageRepository.findByTheme(theme);
+        return forumPage.get().forumPageDTO();
+    }
+
     @Transactional (readOnly = true)
     public List<ForumPageDTO> getAllForumPages() {
         List<ForumPage> forumPages = forumPageRepository.findAll();

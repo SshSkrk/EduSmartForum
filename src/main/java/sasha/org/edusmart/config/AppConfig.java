@@ -227,15 +227,21 @@ public class AppConfig {
                 CourseDTO courseDTO2 = courseService.createCourse(pythonCourse.courseDTO());
             }
 
-            ForumPage forumPage1 = new ForumPage("How to create your first website on java");
-            forumPageService.createForumPage(forumPage1.forumPageDTO());
+            if (forumPageService.searchForumPage("How to create your first website on java") == null) {
+                ForumPage forumPage1 = new ForumPage("How to create your first website on java");
+                forumPageService.createForumPage(forumPage1.forumPageDTO());
+            }
 
+            if (forumPageService.searchForumPage("Help python question") == null) {
             ForumPage forumPage2 = new ForumPage("Help python question");
             forumPageService.createForumPage(forumPage2.forumPageDTO());
+            }
 
+
+            if (forumPageService.searchForumPage("Searching for frontend dev") == null) {
             ForumPage forumPage3 = new ForumPage("Searching for frontend dev");
             forumPageService.createForumPage(forumPage3.forumPageDTO());
-
+            }
 
         };
     }
