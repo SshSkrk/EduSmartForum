@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
@@ -12,7 +13,7 @@ import java.net.URI;
 @Configuration
 public class RedisConfig {
 
-    @Value("${REDIS_URL:}")
+    @Value("${REDISCLOUD_URL:}")
     private String redisUrl; // Heroku Redis URL (empty on local)
 
     @Bean
@@ -24,17 +25,18 @@ public class RedisConfig {
 
             String password = null;
             String userInfo = uri.getUserInfo();
-            if (userInfo != null && userInfo.contains(":")) {
-                // userInfo format: "username:password"
+            if (userInfo != null) {
                 String[] parts = userInfo.split(":", 2);
                 if (parts.length == 2) {
                     password = parts[1];
+                } else {
+                    password = parts[0];
                 }
             }
 
             RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
             if (password != null && !password.isEmpty()) {
-                config.setPassword(password);
+                config.setPassword(RedisPassword.of(password));
             }
 
             return new LettuceConnectionFactory(config);
