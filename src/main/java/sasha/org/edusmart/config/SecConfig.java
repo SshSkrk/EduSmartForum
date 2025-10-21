@@ -47,7 +47,7 @@ public class SecConfig {
         // Разрешаем фронтенд на localhost:3000
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "https://edusmart-551269b21410.herokuapp.com/"
+                "https://edusmart-551269b21410.herokuapp.com"
         ));
 
         // Разрешаем стандартные методы HTTP
