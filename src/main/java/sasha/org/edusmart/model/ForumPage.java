@@ -44,7 +44,7 @@ public class ForumPage {
         forumPageDTO.setId(this.id);
         forumPageDTO.setTheme(this.theme);
         if (answers != null) {
-            forumPageDTO.setAnswers(answers);
+            forumPageDTO.setAnswers(this.answers);
         }
         return forumPageDTO;
     }

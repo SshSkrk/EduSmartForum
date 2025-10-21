@@ -59,15 +59,20 @@ public class ForumPageService {
 
     @Transactional(readOnly = true)
     public ForumPageDTO searchForumPage(String theme) {
-      Optional<ForumPage> forumPage = forumPageRepository.findByTheme(theme);
-        return forumPage.get().forumPageDTO();
+      Optional<ForumPage> forumPageOptional = forumPageRepository.findByTheme(theme);
+      ForumPage forumPage = forumPageOptional.orElse(null);
+      if (forumPage == null) {
+          return null;
+      }else {
+          return forumPage.forumPageDTO();
+      }
     }
 
     @Transactional (readOnly = true)
     public List<ForumPageDTO> getAllForumPages() {
         List<ForumPage> forumPages = forumPageRepository.findAll();
         if (forumPages.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<ForumPageDTO> forumPageDTOS = forumPages.stream().map(ForumPage::forumPageDTO).collect(Collectors.toList());
         return forumPageDTOS;
