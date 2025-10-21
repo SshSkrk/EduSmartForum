@@ -17,18 +17,26 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() throws Exception {
-        if (redisUrl != null && !redisUrl.isEmpty()) {
-            // Parse the Heroku REDISCLOUD_URL
-            URI uri = new URI(redisUrl);
+        if (redisUrl != null && !redisUrl.trim().isEmpty()) {
+            URI uri = new URI(redisUrl.trim());
             String host = uri.getHost();
             int port = uri.getPort();
+
             String password = null;
-            if (uri.getUserInfo() != null) {
-                password = uri.getUserInfo().split(":", 2)[1];
+            String userInfo = uri.getUserInfo();
+            if (userInfo != null && userInfo.contains(":")) {
+                // userInfo format: "username:password"
+                String[] parts = userInfo.split(":", 2);
+                if (parts.length == 2) {
+                    password = parts[1];
+                }
             }
 
             RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
-            if (password != null) config.setPassword(password);
+            if (password != null && !password.isEmpty()) {
+                config.setPassword(password);
+            }
+
             return new LettuceConnectionFactory(config);
         }
 
